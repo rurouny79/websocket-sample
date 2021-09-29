@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebSocket Test</title>
+</head>
+<body>
+	<textarea id="taMsg" rows="20" cols="80" readonly="true"></textarea><br>
+	<input id="itSend" size="80" type="text" />
+	<button onclick="send()">send</button>
+</body>
+<script type="text/javascript">
+	var taMsg = document.getElementById("taMsg");
+	var itSend = document.getElementById('itSend');
+
+	var webSocket = new WebSocket('ws://localhost:8080/websocket');
+	webSocket.onopen = function(event) { onOpen(event) };
+	webSocket.onclose = function(event) { onClose(event) };
+	webSocket.onmessage = function(event) { onMessage(event) };
+	webSocket.onerror = function(event) { onError(event) };
+
+	function onOpen(event) {
+		taMsg.value += "* socket opened\n";
+	}
+	function onClose(event) {
+		taMsg.value += "* socket closed\n";
+	}
+	function onMessage(event) {
+		taMsg.value += event.data + "\n";
+	}
+	function onError(event) {
+		taMsg.value += "* socket error\n";
+	}
+	function send() {
+		webSocket.send(itSend.value);
+		itSend.value = "";
+	}
+</script>
+</html>
